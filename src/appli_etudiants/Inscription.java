@@ -305,7 +305,7 @@ public class Inscription extends javax.swing.JDialog {
                         Etudiants unEtudiant = new Etudiants();
                         unEtudiant.setIdentifiant(jTextFieldId.getText());
                         unEtudiant.setAdresse(jTextFieldAdresse.getText());
-
+                        System.out.println(unEtudiant.getAdresse());
                         DaoS4.etudiantsDao().createIfNotExists(unEtudiant);
                     }
                 } catch (SQLException ex) {
