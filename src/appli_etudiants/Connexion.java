@@ -147,7 +147,7 @@ public class Connexion extends javax.swing.JDialog {
                 //interrogation de la BD pour savoir si l'identifiant/mot de passe est correct
                 //instanciation de la classe Driver du paquetage jdbc de mysql
                 Class.forName("com.mysql.jdbc.Driver");
-                //Chaine de connexion (prise dans l'onglet services)
+                //Chaine de connexion (prise dans l'onglet services
                 String connexionUrl="jdbc:mysql://localhost:3306/applietudiants?user=applietudiants&password=sio";
                
                 //etablissement de la connexion
