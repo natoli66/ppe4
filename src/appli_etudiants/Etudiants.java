@@ -12,7 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author nc
  */
 @DatabaseTable(tableName = "utilisateurs")
-public class Etudiants extends Personne{
+public class Etudiants extends Utilisateur{
     
     @DatabaseField(id=true)
     private String identifiant;

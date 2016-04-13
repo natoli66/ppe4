@@ -76,7 +76,7 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         fileMenu.setMnemonic('f');
         fileMenu.setText("Etudiants");
 
-        inscriptionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        inscriptionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         inscriptionMenuItem.setMnemonic('o');
         inscriptionMenuItem.setText("Inscription");
         inscriptionMenuItem.addActionListener(new java.awt.event.ActionListener() {

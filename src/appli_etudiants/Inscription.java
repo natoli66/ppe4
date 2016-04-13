@@ -60,8 +60,6 @@ public class Inscription extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jTextFieldId = new javax.swing.JTextField();
@@ -74,8 +72,6 @@ public class Inscription extends javax.swing.JDialog {
         jTextFieldTelPro = new javax.swing.JTextField();
         jTextFieldCourriel = new javax.swing.JTextField();
         jTextFieldSiteWeb = new javax.swing.JTextField();
-        jTextFieldEntreePromo = new javax.swing.JTextField();
-        jTextFieldSortiePromo = new javax.swing.JTextField();
         jTextFieldMdp = new javax.swing.JTextField();
         jTextFieldVMdp = new javax.swing.JTextField();
         jButtonInscription = new javax.swing.JButton();
@@ -120,10 +116,6 @@ public class Inscription extends javax.swing.JDialog {
 
         jLabel12.setText("Site Web");
 
-        jLabel13.setText("Année Entrée Promotion");
-
-        jLabel14.setText("Année Sortie Promotion");
-
         jLabel15.setText("Mot de Passe");
 
         jLabel16.setText("Vérification Mot de Passe");
@@ -163,45 +155,45 @@ public class Inscription extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel3)
-                    .add(jLabel4)
-                    .add(jLabel5)
-                    .add(jLabel6)
-                    .add(jLabel7)
-                    .add(jLabel8)
-                    .add(jLabel9)
-                    .add(jLabel10)
-                    .add(jLabel11)
-                    .add(jLabel12)
-                    .add(jLabel13)
-                    .add(jLabel14)
-                    .add(jLabel15)
-                    .add(jLabel16))
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jTextFieldVMdp)
-                    .add(jTextFieldMdp)
-                    .add(jTextFieldSortiePromo)
-                    .add(jTextFieldEntreePromo)
-                    .add(jTextFieldSiteWeb)
-                    .add(jTextFieldCourriel)
-                    .add(jTextFieldTelPro)
-                    .add(jTextFieldTelPerso)
-                    .add(jTextFieldAdresse)
-                    .add(jTextFieldVille)
-                    .add(jTextFieldCP)
-                    .add(jTextFieldPrenom)
-                    .add(jTextFieldNom)
-                    .add(jTextFieldId, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(56, 56, 56))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .add(138, 138, 138)
                 .add(jButtonInscription)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(143, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel16)
+                        .add(18, 18, 18)
+                        .add(jTextFieldVMdp, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel3)
+                            .add(jLabel4)
+                            .add(jLabel5)
+                            .add(jLabel6)
+                            .add(jLabel7)
+                            .add(jLabel8)
+                            .add(jLabel9)
+                            .add(jLabel10)
+                            .add(jLabel11)
+                            .add(jLabel12)
+                            .add(jLabel15))
+                        .add(21, 21, 21)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jTextFieldSiteWeb)
+                            .add(jTextFieldCourriel)
+                            .add(jTextFieldTelPro)
+                            .add(jTextFieldTelPerso)
+                            .add(jTextFieldAdresse)
+                            .add(jTextFieldVille)
+                            .add(jTextFieldCP)
+                            .add(jTextFieldPrenom)
+                            .add(jTextFieldNom)
+                            .add(jTextFieldId, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .add(jTextFieldMdp))))
+                .add(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -250,23 +242,15 @@ public class Inscription extends javax.swing.JDialog {
                     .add(jTextFieldSiteWeb, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel13)
-                    .add(jTextFieldEntreePromo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel14)
-                    .add(jTextFieldSortiePromo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel15)
                     .add(jTextFieldMdp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel16)
-                    .add(jTextFieldVMdp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jTextFieldVMdp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel16))
+                .add(27, 27, 27)
                 .add(jButtonInscription)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
@@ -281,14 +265,12 @@ public class Inscription extends javax.swing.JDialog {
         if (jTextFieldAdresse.getText().trim().equals("")
                 || jTextFieldCP.getText().trim().equals("")
                 || jTextFieldCourriel.getText().trim().equals("")
-                || jTextFieldEntreePromo.getText().trim().equals("")
                 || jTextFieldId.getText().trim().equals("")
                 || jTextFieldMdp.getText().trim().equals("")
                 || jTextFieldVMdp.getText().trim().equals("")
                 || jTextFieldNom.getText().trim().equals("")
                 || jTextFieldPrenom.getText().trim().equals("")
                 || jTextFieldSiteWeb.getText().trim().equals("")
-                || jTextFieldSortiePromo.getText().trim().equals("")
                 || jTextFieldTelPerso.getText().trim().equals("")
                 || jTextFieldTelPro.getText().trim().equals("")
                 || jTextFieldVille.getText().trim().equals("")) {
@@ -305,7 +287,7 @@ public class Inscription extends javax.swing.JDialog {
                         Etudiants unEtudiant = new Etudiants();
                         unEtudiant.setIdentifiant(jTextFieldId.getText());
                         unEtudiant.setAdresse(jTextFieldAdresse.getText());
-                        System.out.println(unEtudiant.getAdresse());
+
                         DaoS4.etudiantsDao().createIfNotExists(unEtudiant);
                     }
                 } catch (SQLException ex) {
@@ -376,8 +358,6 @@ public class Inscription extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel3;
@@ -390,13 +370,11 @@ public class Inscription extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldAdresse;
     private javax.swing.JTextField jTextFieldCP;
     private javax.swing.JTextField jTextFieldCourriel;
-    private javax.swing.JTextField jTextFieldEntreePromo;
     private javax.swing.JTextField jTextFieldId;
     private javax.swing.JTextField jTextFieldMdp;
     private javax.swing.JTextField jTextFieldNom;
     private javax.swing.JTextField jTextFieldPrenom;
     private javax.swing.JTextField jTextFieldSiteWeb;
-    private javax.swing.JTextField jTextFieldSortiePromo;
     private javax.swing.JTextField jTextFieldTelPerso;
     private javax.swing.JTextField jTextFieldTelPro;
     private javax.swing.JTextField jTextFieldVMdp;

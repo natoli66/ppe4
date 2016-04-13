@@ -12,7 +12,7 @@ public class Entreprises {
     private String nom;
    
     private String adresse;
-    private Personne contact;
+    private Utilisateur contact;
 
     public String getNom() {
         return nom;
@@ -30,11 +30,11 @@ public class Entreprises {
         this.adresse = adresse;
     }
 
-    public Personne getContact() {
+    public Utilisateur getContact() {
         return contact;
     }
 
-    public void setContact(Personne contact) {
+    public void setContact(Utilisateur contact) {
         this.contact = contact;
     }
     
