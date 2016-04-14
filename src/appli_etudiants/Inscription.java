@@ -261,7 +261,7 @@ public class Inscription extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextFieldAdresseActionPerformed
 
     private void jButtonInscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInscriptionActionPerformed
-
+            //je suis beau
         if (jTextFieldAdresse.getText().trim().equals("")
                 || jTextFieldCP.getText().trim().equals("")
                 || jTextFieldCourriel.getText().trim().equals("")
