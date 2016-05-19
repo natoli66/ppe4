@@ -22,12 +22,13 @@ import javax.swing.JPasswordField;
  *
  * @author nc
  */
-public class Inscription extends javax.swing.JDialog {
+public class ModifMdp extends javax.swing.JDialog {
     private InterfaceGraphique fenetre;
     /**
      * Creates new form Connexion
      */
-    public Inscription(java.awt.Frame parent, boolean modal) {
+    private Etudiants etudiant;
+    public ModifMdp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         //positionnement au milieu de la fenetre parente
@@ -37,6 +38,8 @@ public class Inscription extends javax.swing.JDialog {
         this.setModal(true);
         //on stocke dans this.fenetre la référence vers la fenetre parente
         this.fenetre=(InterfaceGraphique)parent;
+        this.etudiant = fenetre.getInfoEtudiant();
+
     }
 
     /**
@@ -50,17 +53,13 @@ public class Inscription extends javax.swing.JDialog {
 
         jDialog1 = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jTextFieldId = new javax.swing.JTextField();
-        jTextFieldNom = new javax.swing.JTextField();
-        jTextFieldPrenom = new javax.swing.JTextField();
         jButtonInscription = new javax.swing.JButton();
-        jPasswordFieldMdp = new javax.swing.JPasswordField();
-        jPasswordFieldVMdp = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        jPasswordFieldOld = new javax.swing.JPasswordField();
+        jPasswordFieldVNew = new javax.swing.JPasswordField();
+        jPasswordFieldNew = new javax.swing.JPasswordField();
 
         org.jdesktop.layout.GroupLayout jDialog1Layout = new org.jdesktop.layout.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -80,22 +79,24 @@ public class Inscription extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Inscription");
+        jLabel1.setText("Modification Mot de Passe");
 
-        jLabel3.setText("Identifiant");
+        jLabel4.setText("Ancien Mot de Passe");
 
-        jLabel4.setText("Nom");
+        jLabel5.setText("Nouveau Mot de Passe");
 
-        jLabel5.setText("Prénom");
-
-        jLabel15.setText("Mot de Passe");
-
-        jLabel16.setText("Vérification Mot de Passe");
-
-        jButtonInscription.setText("S'inscrire");
+        jButtonInscription.setText("Envoyer");
         jButtonInscription.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonInscriptionActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Vérification Mot de Passe");
+
+        jPasswordFieldOld.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordFieldOldActionPerformed(evt);
             }
         });
 
@@ -103,96 +104,81 @@ public class Inscription extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
-                .add(141, 141, 141)
-                .add(jButtonInscription)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(layout.createSequentialGroup()
-                .add(52, 52, 52)
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel16)
-                    .add(jLabel3)
-                    .add(jLabel4)
-                    .add(jLabel5)
-                    .add(jLabel15))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 29, Short.MAX_VALUE)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jTextFieldPrenom, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .add(jTextFieldNom)
-                    .add(jTextFieldId)
-                    .add(jPasswordFieldMdp)
-                    .add(jPasswordFieldVMdp))
-                .add(55, 55, 55))
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel5)
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(layout.createSequentialGroup()
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jLabel7)
+                                    .add(layout.createSequentialGroup()
+                                        .add(126, 126, 126)
+                                        .add(jButtonInscription)))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 22, Short.MAX_VALUE)
+                                .add(jPasswordFieldVNew, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(0, 0, Short.MAX_VALUE)
+                                .add(jPasswordFieldNew, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(jLabel4)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jPasswordFieldOld, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(25, 25, 25))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .add(8, 8, 8)
                 .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 22, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel3)
-                    .add(jTextFieldId, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jLabel4)
+                    .add(jPasswordFieldOld, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextFieldNom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel4))
+                    .add(jLabel5)
+                    .add(jPasswordFieldNew, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextFieldPrenom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel5))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel15)
-                    .add(jPasswordFieldMdp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel16)
-                    .add(jPasswordFieldVMdp, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 24, Short.MAX_VALUE)
+                    .add(jLabel7)
+                    .add(jPasswordFieldVNew, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jButtonInscription)
-                .addContainerGap())
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonInscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInscriptionActionPerformed
-
-        if (jTextFieldId.getText().trim().equals("")
-                || jPasswordFieldMdp.getText().trim().equals("")
-                || jPasswordFieldVMdp.getText().trim().equals("")
-                || jTextFieldNom.getText().trim().equals("")
-                || jTextFieldPrenom.getText().trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "Certains champs sont vides");
-        } else {
-            if (!jPasswordFieldMdp.getText().equals(jPasswordFieldVMdp.getText())) {
-                JOptionPane.showMessageDialog(this, "Les mots de passe renseignés doivent être identiques");
-            } else {
-                try {
-                    Etudiants etudiant = DaoS4.etudiantsDao().queryForId(jTextFieldId.getText());
-                    if (etudiant != null) {
-                        JOptionPane.showMessageDialog(this, "Ce nom d'utilisateur est déjà pris");
-                    } else {
-                        Etudiants unEtudiant = new Etudiants();
-                        
-                        unEtudiant.setIdentifiant(jTextFieldId.getText());
-                        unEtudiant.setMot_de_passe(Outils.md5(jPasswordFieldMdp.getText()));
-                        unEtudiant.setNom(jTextFieldNom.getText());
-                        unEtudiant.setPrenom(jTextFieldPrenom.getText());
-
-                        DaoS4.etudiantsDao().createIfNotExists(unEtudiant);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(Inscription.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(Inscription.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            if(!Outils.md5(jPasswordFieldOld.getText()).equals(etudiant.getMot_de_passe())){
+                JOptionPane.showMessageDialog(this, "Le mot de passe d'origine est incorrect");
+            }else{
+                if (!jPasswordFieldNew.getText().equals(jPasswordFieldVNew.getText())) {
+                    JOptionPane.showMessageDialog(this, "Les mots de passe renseignés doivent être identiques");
+                } else {
+                    etudiant.setMot_de_passe(Outils.md5(jPasswordFieldNew.getText()));
+                    DaoS4.etudiantsDao().update(etudiant);
                 }
             }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(ModifMdp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ModifMdp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonInscriptionActionPerformed
 
+    private void jPasswordFieldOldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldOldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordFieldOldActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -210,21 +196,27 @@ public class Inscription extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Inscription.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifMdp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Inscription.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifMdp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Inscription.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifMdp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Inscription.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifMdp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Inscription dialog = new Inscription(new javax.swing.JFrame(), true);
+                ModifMdp dialog = new ModifMdp(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -239,15 +231,11 @@ public class Inscription extends javax.swing.JDialog {
     private javax.swing.JButton jButtonInscription;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPasswordField jPasswordFieldMdp;
-    private javax.swing.JPasswordField jPasswordFieldVMdp;
-    private javax.swing.JTextField jTextFieldId;
-    private javax.swing.JTextField jTextFieldNom;
-    private javax.swing.JTextField jTextFieldPrenom;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPasswordField jPasswordFieldNew;
+    private javax.swing.JPasswordField jPasswordFieldOld;
+    private javax.swing.JPasswordField jPasswordFieldVNew;
     // End of variables declaration//GEN-END:variables
 }

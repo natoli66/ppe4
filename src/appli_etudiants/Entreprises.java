@@ -10,9 +10,7 @@ package appli_etudiants;
  */
 public class Entreprises {
     private String nom;
-   
     private String adresse;
-    private Utilisateur contact;
 
     public String getNom() {
         return nom;
@@ -29,13 +27,4 @@ public class Entreprises {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-
-    public Utilisateur getContact() {
-        return contact;
-    }
-
-    public void setContact(Utilisateur contact) {
-        this.contact = contact;
-    }
-    
 }

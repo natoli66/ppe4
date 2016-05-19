@@ -20,12 +20,13 @@ import javax.swing.JOptionPane;
  *
  * @author nc
  */
-public class Connexion extends javax.swing.JDialog {
+public class Suppression extends javax.swing.JDialog {
     private InterfaceGraphique fenetre;
     /**
      * Creates new form Connexion
      */
-    public Connexion(java.awt.Frame parent, boolean modal) {
+    private Etudiants etudiant;
+    public Suppression(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         //positionnement au milieu de la fenetre parente
@@ -35,6 +36,7 @@ public class Connexion extends javax.swing.JDialog {
         this.setModal(true);
         //on stocke dans this.fenetre la référence vers la fenetre parente
         this.fenetre=(InterfaceGraphique)parent;
+        this.etudiant = fenetre.getInfoEtudiant();
     }
 
     /**
@@ -88,30 +90,29 @@ public class Connexion extends javax.swing.JDialog {
         jLabelIdentifiant.setText("Identifiant");
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        jLabel1.setText("Saisissez vos informations");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Suppression du Compte");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(82, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(jButtonConnecter)
-                        .add(123, 123, 123))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel1)
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jLabelIdentifiant)
-                                    .add(jLabelMDP))
-                                .add(18, 18, 18)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(jTextFieldIdentifiant)
-                                    .add(jPassMDP, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))))
-                        .add(59, 59, 59))))
+                            .add(jLabelIdentifiant)
+                            .add(jLabelMDP))
+                        .add(18, 18, 18)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jTextFieldIdentifiant)
+                            .add(jPassMDP, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                        .add(59, 59, 59))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(jButtonConnecter)
+                        .add(126, 126, 126))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -126,72 +127,35 @@ public class Connexion extends javax.swing.JDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jPassMDP, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabelMDP))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jButtonConnecter)
-                .add(24, 24, 24))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonConnecterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnecterActionPerformed
-        // TODO add your handling code here:
-        /**
-         * Code ici qui va interroger la base de données
-         */
-        //Vérification des saisies
-        if (jTextFieldIdentifiant.getText().length()==0 || jPassMDP.getText().length()==0){
-            JOptionPane.showMessageDialog(this, "Erreur de saisie, les deux champs doivent être renseignés.");
-            
-            this.fenetre.deconnecte();
+        if(!jTextFieldIdentifiant.getText().equals(etudiant.getIdentifiant())){
+            JOptionPane.showMessageDialog(this, "L'identifiant saisi est incorrect !");
         }else{
-            
             try {
-                //interrogation de la BD pour savoir si l'identifiant/mot de passe est correct
-                //instanciation de la classe Driver du paquetage jdbc de mysql
-                Class.forName("com.mysql.jdbc.Driver");
-                //Chaine de connexion (prise dans l'onglet services
-                String connexionUrl="jdbc:mysql://localhost:3306/applietudiants?user=applietudiants&password=sio";
-               
-                //etablissement de la connexion
-                Connection maConnexion=(Connection)DriverManager.getConnection(connexionUrl);
-                
-                //requete
-                Statement requete=maConnexion.createStatement();
-                String identifiant=jTextFieldIdentifiant.getText();
-                String mdp=jPassMDP.getText();
-                
-            
-                //application du cryptage md5 au mdp
-                // ici on appelle md5 membre static de la classe outils
-                mdp=Outils.md5(mdp);
-            
-                ResultSet lignesRetournees=requete.executeQuery("select * from Utilisateurs where identifiant='"+identifiant+"' and mot_de_passe='"+mdp+"'");
-                if (lignesRetournees.next()){
-                    //Modifications de la Mission 2 à placer ici
-                    
-                    
-                    this.fenetre.connecte(DaoS4.etudiantsDao().queryForId(identifiant));
-                    this.setVisible(false);
-                    this.fenetre.majConnexion();
-                    
+                if(!Outils.md5(jPassMDP.getText()).equals(etudiant.getMot_de_passe())){
+                    JOptionPane.showMessageDialog(this, "Le mot de passe saisi est incorrect !");
                 }else{
-                    JOptionPane.showMessageDialog(rootPane, "identifiant ou mot de passe incorrect");
-                };
-                
-                
-            } catch (ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(rootPane, "Classe de connexion mysql non trouvee..."+ex.toString());
+                    System.out.println(etudiant);
+                    DaoS4.etudiantsDao().delete(etudiant);
+                    this.fenetre.deconnecte();
+                    this.fenetre.majConnexion();
+                    this.setVisible(false);
+                    this.dispose();
+                }
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Suppression.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Suppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-             catch (SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, "SQL exception ... "+ex.toString());
-            }
-            catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
         }
-
     }//GEN-LAST:event_jButtonConnecterActionPerformed
 
     private void jPassMDPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassMDPActionPerformed
@@ -215,20 +179,21 @@ public class Connexion extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Connexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Suppression.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Connexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Suppression.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Connexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Suppression.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Connexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Suppression.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Connexion dialog = new Connexion(new javax.swing.JFrame(), true);
+                Suppression dialog = new Suppression(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

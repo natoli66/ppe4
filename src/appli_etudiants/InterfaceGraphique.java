@@ -26,6 +26,8 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private Connexion fenConnexion;
     private Deconnexion fenDeconnexion;
     private Inscription fenInscription;
+    private Modification fenModification;
+    private Suppression fenSuppression;
 
     /**
      * constructeur : Creates new form InterfaceGraphique
@@ -60,6 +62,8 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         inscriptionMenuItem = new javax.swing.JMenuItem();
         connexionMenuItem = new javax.swing.JMenuItem();
+        modificationMenuItem = new javax.swing.JMenuItem();
+        suppressionMenuItem = new javax.swing.JMenuItem();
         deconnexionMenuItem = new javax.swing.JMenuItem();
         SortieMenuItem = new javax.swing.JMenuItem();
         aideMenu = new javax.swing.JMenu();
@@ -96,6 +100,24 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         });
         fileMenu.add(connexionMenuItem);
 
+        modificationMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        modificationMenuItem.setText("Modification");
+        modificationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificationMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(modificationMenuItem);
+
+        suppressionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        suppressionMenuItem.setText("Suppression");
+        suppressionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                suppressionMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(suppressionMenuItem);
+
         deconnexionMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         deconnexionMenuItem.setMnemonic('s');
         deconnexionMenuItem.setText("Déconnexion");
@@ -106,9 +128,9 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         });
         fileMenu.add(deconnexionMenuItem);
 
-        SortieMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        SortieMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         SortieMenuItem.setMnemonic('x');
-        SortieMenuItem.setText("Sortie");
+        SortieMenuItem.setText("Quitter");
         SortieMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SortieMenuItemActionPerformed(evt);
@@ -181,13 +203,23 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private void aproposMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aproposMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_aproposMenuItemActionPerformed
-    public void connecte(String leNom){
+
+    private void modificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificationMenuItemActionPerformed
+        fenModification=new Modification(this, true);
+        this.fenModification.setVisible(true);
+    }//GEN-LAST:event_modificationMenuItemActionPerformed
+
+    private void suppressionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppressionMenuItemActionPerformed
+        fenSuppression=new Suppression(this,true);
+        this.fenSuppression.setVisible(true);
+    }//GEN-LAST:event_suppressionMenuItemActionPerformed
+    public void connecte(Etudiants leEtudiant){
         //maj de l'etat de la connexion
         this.connecte=true;
         //ajout du nom dans la fenetre
-        this.nomjMenu.setText("Connecté en tant que : "+leNom);
+        this.nomjMenu.setText("Connecté en tant que : "+leEtudiant.getNom());
         this.nomjMenu.setEnabled(false);
-        
+        this.infoEtudiant = leEtudiant;
         
     }
     public void deconnecte(){
@@ -196,7 +228,14 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     }
     public void majConnexion(){
         deconnexionMenuItem.setEnabled(this.connecte);
+        modificationMenuItem.setEnabled(this.connecte);
+        suppressionMenuItem.setEnabled(this.connecte);
         connexionMenuItem.setEnabled(!this.connecte);
+        inscriptionMenuItem.setEnabled(!this.connecte);
+    }
+    
+    public Etudiants getInfoEtudiant(){
+        return this.infoEtudiant;
     }
     
     /**
@@ -244,7 +283,9 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private javax.swing.JMenuItem inscriptionMenuItem;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem modificationMenuItem;
     private javax.swing.JMenuBar nomMenuBar;
     private javax.swing.JMenu nomjMenu;
+    private javax.swing.JMenuItem suppressionMenuItem;
     // End of variables declaration//GEN-END:variables
 }
