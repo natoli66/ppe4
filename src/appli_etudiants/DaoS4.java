@@ -40,6 +40,7 @@ public class DaoS4 {
         if (DaoS4.clientDao == null) {
             DaoS4.monDaoS4 = new DaoS4();
         }
+        
         return DaoS4.clientDao;
     }
     
