@@ -4,22 +4,42 @@
  */
 package appli_etudiants;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import com.mysql.jdbc.Connection;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author nc
  */
 public class InterfaceGraphique extends javax.swing.JFrame {
+
     /**
      * attribut qui indique si l'etudiant est connecté ou non
      */
     private boolean connecte;
     private Etudiants infoEtudiant;
-    
+
     /**
      * interface graphique
      */
@@ -29,14 +49,29 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private Modification fenModification;
     private Suppression fenSuppression;
 
+    private List<CVCentreInteret> CIs;
+    private int pageCIs = 0;
+
+    private List<CVEP> EPs;
+    private int pageEPs = 0;
+
+    private List<CVForm> Forms;
+    private int pageForms = 0;
+
+    private List<CVInfo> Infos;
+    private int pageInfos = 0;
+
+    private List<CVLangue> Langues;
+    private int pageLangues = 0;
+
     /**
      * constructeur : Creates new form InterfaceGraphique
-     * 
+     *
      */
     public InterfaceGraphique() {
         initComponents();
         //par defaut, la connexion est inactive
-        this.connecte=false;
+        this.connecte = false;
         //element du menu de deconnexion grisé
         this.majConnexion();
         //centrage
@@ -57,7 +92,86 @@ public class InterfaceGraphique extends javax.swing.JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
-        desktopPane = new javax.swing.JDesktopPane();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jPanelOnConnection = new javax.swing.JPanel();
+        jTextFieldTitre = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jPanelCentreInteret = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabelCIPages = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jButtonCIPrev = new javax.swing.JButton();
+        jButtonCINext = new javax.swing.JButton();
+        jTextFieldCI = new javax.swing.JTextField();
+        jButtonCIAdd = new javax.swing.JButton();
+        jButtonCIUpdate = new javax.swing.JButton();
+        jButtonCIDelete = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jButtonEPPrev = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabelEPPages = new javax.swing.JLabel();
+        jButtonEPNext = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextFieldEPEntreprise = new javax.swing.JTextField();
+        jTextFieldEPFonction = new javax.swing.JTextField();
+        jTextFieldEPPeriode = new javax.swing.JTextField();
+        jTextFieldEPLieu = new javax.swing.JTextField();
+        jTextFieldEPTaches = new javax.swing.JTextField();
+        jButtonEPAdd = new javax.swing.JButton();
+        jButtonEPUpdate = new javax.swing.JButton();
+        jButtonEPDelete = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jTextFieldFormForm = new javax.swing.JTextField();
+        jTextFieldFormPeriode = new javax.swing.JTextField();
+        jTextFieldFormLieu = new javax.swing.JTextField();
+        jButtonFormAdd = new javax.swing.JButton();
+        jButtonFormUpdate = new javax.swing.JButton();
+        jButtonFormDelete = new javax.swing.JButton();
+        jButtonFormNext = new javax.swing.JButton();
+        jLabelFormPages = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jButtonFormPrev = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jTextFieldInfoCompetences = new javax.swing.JTextField();
+        jTextFieldInfoCategorie = new javax.swing.JTextField();
+        jButtonInfoAdd = new javax.swing.JButton();
+        jButtonInfoUpdate = new javax.swing.JButton();
+        jButtonInfoDelete = new javax.swing.JButton();
+        jButtonInfoNext = new javax.swing.JButton();
+        jLabelInfoPages = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jButtonInfoPrev = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jButtonLangueNext = new javax.swing.JButton();
+        jLabelLanguePages = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jButtonLanguePrev = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jTextFieldLangue = new javax.swing.JTextField();
+        jTextFieldLangueNiveau = new javax.swing.JTextField();
+        jButtonLangueAdd = new javax.swing.JButton();
+        jButtonLangueUpdate = new javax.swing.JButton();
+        jButtonLangueDelete = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jTextFieldImagePath = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jPanelImage = new javax.swing.JPanel();
+        jLabelImgSize = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         nomMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         inscriptionMenuItem = new javax.swing.JMenuItem();
@@ -72,10 +186,723 @@ public class InterfaceGraphique extends javax.swing.JFrame {
 
         jMenuItem1.setText("jMenuItem1");
 
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 100, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 100, Short.MAX_VALUE)
+        );
+
+        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 100, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 100, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        desktopPane.setBackground(new java.awt.Color(255, 255, 255));
-        desktopPane.setBorder(new javax.swing.border.MatteBorder(null));
+        jTextFieldTitre.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextFieldTitre.setText("TITRE CV");
+        jTextFieldTitre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTitreActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Exporter CV en .pdf");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Page : ");
+
+        jLabelCIPages.setText("0 / 0");
+
+        jLabel2.setText("Centre d'intéret : ");
+
+        jButtonCIPrev.setText("<");
+        jButtonCIPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCIPrevActionPerformed(evt);
+            }
+        });
+
+        jButtonCINext.setText(">");
+        jButtonCINext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCINextActionPerformed(evt);
+            }
+        });
+
+        jButtonCIAdd.setText("Ajouter");
+        jButtonCIAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCIAddActionPerformed(evt);
+            }
+        });
+
+        jButtonCIUpdate.setText("Modifier");
+        jButtonCIUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCIUpdateActionPerformed(evt);
+            }
+        });
+
+        jButtonCIDelete.setText("Supprimer");
+        jButtonCIDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCIDeleteActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanelCentreInteretLayout = new org.jdesktop.layout.GroupLayout(jPanelCentreInteret);
+        jPanelCentreInteret.setLayout(jPanelCentreInteretLayout);
+        jPanelCentreInteretLayout.setHorizontalGroup(
+            jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelCentreInteretLayout.createSequentialGroup()
+                .add(jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanelCentreInteretLayout.createSequentialGroup()
+                        .add(99, 99, 99)
+                        .add(jButtonCIPrev)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabelCIPages)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jButtonCINext))
+                    .add(jPanelCentreInteretLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jTextFieldCI, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jButtonCIUpdate)
+                            .add(jButtonCIAdd)
+                            .add(jButtonCIDelete))))
+                .addContainerGap(153, Short.MAX_VALUE))
+        );
+        jPanelCentreInteretLayout.setVerticalGroup(
+            jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelCentreInteretLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jTextFieldCI, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonCIAdd))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonCIUpdate)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonCIDelete)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 348, Short.MAX_VALUE)
+                .add(jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelCentreInteretLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel1)
+                            .add(jLabelCIPages))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonCIPrev))
+                    .add(jButtonCINext))
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Centres Interet", jPanelCentreInteret);
+
+        jButtonEPPrev.setText("<");
+        jButtonEPPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEPPrevActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Page : ");
+
+        jLabelEPPages.setText("0 / 0");
+
+        jButtonEPNext.setText(">");
+        jButtonEPNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEPNextActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Periode");
+
+        jLabel5.setText("Fonction");
+
+        jLabel6.setText("Entreprise");
+
+        jLabel7.setText("Lieu");
+
+        jLabel8.setText("Taches effectués (séparées par || )");
+
+        jButtonEPAdd.setText("Ajouter");
+        jButtonEPAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEPAddActionPerformed(evt);
+            }
+        });
+
+        jButtonEPUpdate.setText("Modifier");
+        jButtonEPUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEPUpdateActionPerformed(evt);
+            }
+        });
+
+        jButtonEPDelete.setText("Supprimer");
+        jButtonEPDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEPDeleteActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .add(113, 113, 113)
+                                .add(jButtonEPPrev)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jLabel3)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jLabelEPPages)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jButtonEPNext))
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .add(jLabel8))
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jPanel2Layout.createSequentialGroup()
+                                        .add(jLabel7)
+                                        .add(40, 40, 40)
+                                        .add(jTextFieldEPLieu))
+                                    .add(jPanel2Layout.createSequentialGroup()
+                                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                            .add(jLabel5)
+                                            .add(jLabel4))
+                                        .add(18, 18, 18)
+                                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                            .add(jTextFieldEPFonction)
+                                            .add(jTextFieldEPPeriode)))
+                                    .add(jPanel2Layout.createSequentialGroup()
+                                        .add(jLabel6)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                        .add(jTextFieldEPEntreprise, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(0, 0, Short.MAX_VALUE)))
+                                .add(80, 80, 80)))
+                        .add(40, 40, 40))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jTextFieldEPTaches)
+                            .add(jPanel2Layout.createSequentialGroup()
+                                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jButtonEPAdd)
+                                    .add(jButtonEPUpdate))
+                                .add(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jButtonEPDelete)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel4)
+                    .add(jTextFieldEPPeriode, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel5)
+                    .add(jTextFieldEPFonction, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel6)
+                    .add(jTextFieldEPEntreprise, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel7)
+                    .add(jTextFieldEPLieu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel8)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jTextFieldEPTaches, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jButtonEPAdd)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonEPUpdate)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButtonEPDelete)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 193, Short.MAX_VALUE)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel3)
+                            .add(jLabelEPPages))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonEPPrev))
+                    .add(jButtonEPNext))
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Experience Pro.", jPanel2);
+
+        jLabel9.setText("Période");
+
+        jLabel10.setText("Formation");
+
+        jLabel11.setText("Lieu");
+
+        jButtonFormAdd.setText("Ajouter");
+        jButtonFormAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFormAddActionPerformed(evt);
+            }
+        });
+
+        jButtonFormUpdate.setText("Modifier");
+        jButtonFormUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFormUpdateActionPerformed(evt);
+            }
+        });
+
+        jButtonFormDelete.setText("Supprimer");
+        jButtonFormDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFormDeleteActionPerformed(evt);
+            }
+        });
+
+        jButtonFormNext.setText(">");
+        jButtonFormNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFormNextActionPerformed(evt);
+            }
+        });
+
+        jLabelFormPages.setText("0 / 0");
+
+        jLabel12.setText("Page : ");
+
+        jButtonFormPrev.setText("<");
+        jButtonFormPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFormPrevActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jLabel9)
+                        .add(22, 22, 22)
+                        .add(jTextFieldFormPeriode))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel10)
+                            .add(jLabel11))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jTextFieldFormForm)
+                            .add(jTextFieldFormLieu)))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jButtonFormAdd)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonFormUpdate)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonFormDelete)
+                        .add(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .add(jPanel3Layout.createSequentialGroup()
+                .add(121, 121, 121)
+                .add(jButtonFormPrev)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jLabel12)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabelFormPages)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jButtonFormNext)
+                .addContainerGap(155, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel9)
+                    .add(jTextFieldFormPeriode, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel10)
+                    .add(jTextFieldFormForm, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel11)
+                    .add(jTextFieldFormLieu, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButtonFormAdd)
+                    .add(jButtonFormUpdate)
+                    .add(jButtonFormDelete))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 323, Short.MAX_VALUE)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel12)
+                            .add(jLabelFormPages))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonFormPrev))
+                    .add(jButtonFormNext))
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Formation", jPanel3);
+
+        jLabel13.setText("Catégorie");
+
+        jLabel14.setText("Compétences");
+
+        jButtonInfoAdd.setText("Ajouter");
+        jButtonInfoAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoAddActionPerformed(evt);
+            }
+        });
+
+        jButtonInfoUpdate.setText("Modifier");
+        jButtonInfoUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoUpdateActionPerformed(evt);
+            }
+        });
+
+        jButtonInfoDelete.setText("Supprimer");
+        jButtonInfoDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoDeleteActionPerformed(evt);
+            }
+        });
+
+        jButtonInfoNext.setText(">");
+        jButtonInfoNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoNextActionPerformed(evt);
+            }
+        });
+
+        jLabelInfoPages.setText("0 / 0");
+
+        jLabel15.setText("Page : ");
+
+        jButtonInfoPrev.setText("<");
+        jButtonInfoPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoPrevActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel14)
+                            .add(jLabel13))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jTextFieldInfoCompetences)
+                            .add(jPanel5Layout.createSequentialGroup()
+                                .add(jTextFieldInfoCategorie, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 183, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 0, Short.MAX_VALUE))))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jButtonInfoAdd)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonInfoUpdate)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonInfoDelete)
+                        .add(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(129, 129, 129)
+                .add(jButtonInfoPrev)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jLabel15)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabelInfoPages)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jButtonInfoNext)
+                .addContainerGap(147, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel13)
+                    .add(jTextFieldInfoCategorie, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel14)
+                    .add(jTextFieldInfoCompetences, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButtonInfoAdd)
+                    .add(jButtonInfoUpdate)
+                    .add(jButtonInfoDelete))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 354, Short.MAX_VALUE)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel15)
+                            .add(jLabelInfoPages))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonInfoPrev))
+                    .add(jButtonInfoNext))
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Informatique", jPanel5);
+
+        jButtonLangueNext.setText(">");
+        jButtonLangueNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLangueNextActionPerformed(evt);
+            }
+        });
+
+        jLabelLanguePages.setText("0 / 0");
+
+        jLabel16.setText("Page : ");
+
+        jButtonLanguePrev.setText("<");
+        jButtonLanguePrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLanguePrevActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setText("Langue");
+
+        jLabel18.setText("Niveau");
+
+        jButtonLangueAdd.setText("Ajouter");
+        jButtonLangueAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLangueAddActionPerformed(evt);
+            }
+        });
+
+        jButtonLangueUpdate.setText("Modifier");
+        jButtonLangueUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLangueUpdateActionPerformed(evt);
+            }
+        });
+
+        jButtonLangueDelete.setText("Supprimer");
+        jButtonLangueDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLangueDeleteActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel6Layout.createSequentialGroup()
+                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel6Layout.createSequentialGroup()
+                        .add(123, 123, 123)
+                        .add(jButtonLanguePrev)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jLabel16)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabelLanguePages)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jButtonLangueNext))
+                    .add(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel6Layout.createSequentialGroup()
+                                .add(jLabel18)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jTextFieldLangueNiveau))
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel6Layout.createSequentialGroup()
+                                .add(jLabel17)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jTextFieldLangue, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 106, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(18, 18, 18)
+                        .add(jButtonLangueAdd)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonLangueUpdate)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonLangueDelete)))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel17)
+                    .add(jTextFieldLangue, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonLangueAdd)
+                    .add(jButtonLangueUpdate)
+                    .add(jButtonLangueDelete))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel18)
+                    .add(jTextFieldLangueNiveau, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 380, Short.MAX_VALUE)
+                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel16)
+                            .add(jLabelLanguePages))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jButtonLanguePrev))
+                    .add(jButtonLangueNext))
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Langue", jPanel6);
+
+        jButton3.setText("Parcourir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Envoyer");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanelImageLayout = new org.jdesktop.layout.GroupLayout(jPanelImage);
+        jPanelImage.setLayout(jPanelImageLayout);
+        jPanelImageLayout.setHorizontalGroup(
+            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 0, Short.MAX_VALUE)
+        );
+        jPanelImageLayout.setVerticalGroup(
+            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 379, Short.MAX_VALUE)
+        );
+
+        jButton5.setText("Récupérer");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanelImage, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jTextFieldImagePath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                            .add(jPanel7Layout.createSequentialGroup()
+                                .add(jLabelImgSize)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jButton5)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jButton3)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jButton4))))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButton3)
+                    .add(jTextFieldImagePath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButton4)
+                    .add(jLabelImgSize)
+                    .add(jButton5))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanelImage, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Photo", jPanel7);
+
+        jButton1.setText("Modifier Titre");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanelOnConnectionLayout = new org.jdesktop.layout.GroupLayout(jPanelOnConnection);
+        jPanelOnConnection.setLayout(jPanelOnConnectionLayout);
+        jPanelOnConnectionLayout.setHorizontalGroup(
+            jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelOnConnectionLayout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanelOnConnectionLayout.createSequentialGroup()
+                        .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(jPanelOnConnectionLayout.createSequentialGroup()
+                        .add(jTextFieldTitre, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButton1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jButton2)))
+                .addContainerGap())
+        );
+        jPanelOnConnectionLayout.setVerticalGroup(
+            jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelOnConnectionLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jTextFieldTitre, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButton2)
+                    .add(jButton1))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jTabbedPane2)
+                .add(6, 6, 6))
+        );
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("Etudiants");
@@ -162,11 +989,14 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(desktopPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 310, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanelOnConnection, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(desktopPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 184, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(jPanelOnConnection, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -178,25 +1008,25 @@ public class InterfaceGraphique extends javax.swing.JFrame {
 
     private void connexionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connexionMenuItemActionPerformed
         // TODO add your handling code here:
-       
+
         /**
-         * création de la fenetre de connexion et attachement de cette dernière à l'interface
-         * maj de connecte en retour
-        */
-        this.fenConnexion=new Connexion(this, true);
+         * création de la fenetre de connexion et attachement de cette dernière
+         * à l'interface maj de connecte en retour
+         */
+        this.fenConnexion = new Connexion(this, true);
         this.fenConnexion.setVisible(true);
-        
+
         //JOptionPane.showMessageDialog(this, "cc");
     }//GEN-LAST:event_connexionMenuItemActionPerformed
 
     private void deconnexionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deconnexionMenuItemActionPerformed
         // TODO add your handling code here:
-        fenDeconnexion=new Deconnexion(this, true);
+        fenDeconnexion = new Deconnexion(this, true);
         this.fenDeconnexion.setVisible(true);
     }//GEN-LAST:event_deconnexionMenuItemActionPerformed
 
     private void inscriptionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inscriptionMenuItemActionPerformed
-        fenInscription=new Inscription(this, true);
+        fenInscription = new Inscription(this, true);
         this.fenInscription.setVisible(true);
     }//GEN-LAST:event_inscriptionMenuItemActionPerformed
 
@@ -205,39 +1035,625 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     }//GEN-LAST:event_aproposMenuItemActionPerformed
 
     private void modificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificationMenuItemActionPerformed
-        fenModification=new Modification(this, true);
+        fenModification = new Modification(this, true);
         this.fenModification.setVisible(true);
     }//GEN-LAST:event_modificationMenuItemActionPerformed
 
     private void suppressionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppressionMenuItemActionPerformed
-        fenSuppression=new Suppression(this,true);
+        fenSuppression = new Suppression(this, true);
         this.fenSuppression.setVisible(true);
     }//GEN-LAST:event_suppressionMenuItemActionPerformed
-    public void connecte(Etudiants leEtudiant){
+
+    private void jTextFieldTitreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTitreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTitreActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            if (DaoS4.titreDao().queryForId(String.valueOf(infoEtudiant.getId())) == null) {
+                CVTitre titre = new CVTitre();
+                titre.setId_utilisateur(infoEtudiant.getId());
+                titre.setLibelle_titre(jTextFieldTitre.getText());
+                DaoS4.titreDao().createIfNotExists(titre);
+            } else {
+                CVTitre titre = DaoS4.titreDao().queryForId(String.valueOf(infoEtudiant.getId()));
+                titre.setLibelle_titre(jTextFieldTitre.getText());
+                DaoS4.titreDao().update(titre);
+            }
+            JOptionPane.showMessageDialog(this, "Le titre de votre CV a bien été mis à jour");
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButtonCIPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCIPrevActionPerformed
+        if (pageCIs > 0) {
+            pageCIs--;
+            refreshCIs();
+        }
+    }//GEN-LAST:event_jButtonCIPrevActionPerformed
+
+    private void jButtonCINextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCINextActionPerformed
+        if (CIs.size() > pageCIs + 1) {
+            pageCIs++;
+            refreshCIs();
+        }
+    }//GEN-LAST:event_jButtonCINextActionPerformed
+
+    private void jButtonCIAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCIAddActionPerformed
+        CVCentreInteret centre = new CVCentreInteret();
+        centre.setId_utilisateur(infoEtudiant.getId());
+        centre.setLibelle_centre_interet(jTextFieldCI.getText());
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous ajouter le centre d'intéret " + jTextFieldCI.getText() + " ?", "Ajout d'un centre d'intéret", JOptionPane.OK_CANCEL_OPTION);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.centreInteretDao().createIfNotExists(centre);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            refreshCIs();
+        }
+    }//GEN-LAST:event_jButtonCIAddActionPerformed
+
+    private void jButtonCIDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCIDeleteActionPerformed
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous supprimer le centre d'intéret " + jTextFieldCI.getText() + " ?", "Suppression d'un centre d'intéret", JOptionPane.OK_CANCEL_OPTION);
+        CVCentreInteret centre = CIs.get(pageCIs);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.centreInteretDao().delete(centre);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (pageCIs + 1 == CIs.size()) {
+            pageCIs--;
+        }
+        refreshCIs();
+    }//GEN-LAST:event_jButtonCIDeleteActionPerformed
+
+    private void jButtonCIUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCIUpdateActionPerformed
+        CVCentreInteret centre = CIs.get(pageCIs);
+        centre.setLibelle_centre_interet(jTextFieldCI.getText());
+
+        try {
+            DaoS4.centreInteretDao().update(centre);
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButtonCIUpdateActionPerformed
+
+    private void jButtonEPPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEPPrevActionPerformed
+        if (pageEPs > 0) {
+            pageEPs--;
+            refreshEPs();
+        }
+    }//GEN-LAST:event_jButtonEPPrevActionPerformed
+
+    private void jButtonEPNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEPNextActionPerformed
+        if (EPs.size() > pageEPs + 1) {
+            pageEPs++;
+            refreshEPs();
+        }
+    }//GEN-LAST:event_jButtonEPNextActionPerformed
+
+    private void jButtonEPAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEPAddActionPerformed
+        CVEP uneEP = new CVEP();
+        uneEP.setId_utilisateur(infoEtudiant.getId());
+
+        String libelle = jTextFieldEPPeriode.getText() + "||"
+                + jTextFieldEPFonction.getText() + "||"
+                + jTextFieldEPEntreprise.getText() + "||"
+                + jTextFieldEPLieu.getText() + "||"
+                + jTextFieldEPTaches.getText();
+
+        uneEP.setLibelle_experience_prof(libelle);
+
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous ajouter l'expérience professionnelle suivante ?", "Ajout d'une expérience professionnelle", JOptionPane.OK_CANCEL_OPTION);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.epDao().createIfNotExists(uneEP);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            refreshEPs();
+        }
+    }//GEN-LAST:event_jButtonEPAddActionPerformed
+
+    private void jButtonEPDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEPDeleteActionPerformed
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous supprimer la situation professionnelle ?", "Suppression d'une situation professionnelle", JOptionPane.OK_CANCEL_OPTION);
+        CVEP uneEP = EPs.get(pageEPs);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.epDao().delete(uneEP);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (pageEPs + 1 == EPs.size()) {
+            pageEPs--;
+        }
+        refreshEPs();
+    }//GEN-LAST:event_jButtonEPDeleteActionPerformed
+
+    private void jButtonEPUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEPUpdateActionPerformed
+        CVEP uneEP = EPs.get(pageEPs);
+
+        String libelle = jTextFieldEPPeriode.getText() + "||"
+                + jTextFieldEPFonction.getText() + "||"
+                + jTextFieldEPEntreprise.getText() + "||"
+                + jTextFieldEPLieu.getText() + "||"
+                + jTextFieldEPTaches.getText();
+
+        uneEP.setLibelle_experience_prof(libelle);
+
+        try {
+            DaoS4.epDao().update(uneEP);
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButtonEPUpdateActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+        fileChooser.setFileFilter(filter);
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            jTextFieldImagePath.setText(path);
+            if (fileChooser.getSelectedFile().length() < 65535) {
+                jLabelImgSize.setForeground(Color.GREEN);
+            } else {
+                jLabelImgSize.setForeground(Color.RED);
+            }
+            jLabelImgSize.setText(String.valueOf(fileChooser.getSelectedFile().length()));
+            Graphics g = jPanelImage.getGraphics();
+            try {
+                BufferedImage img = ImageIO.read(fileChooser.getSelectedFile());
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(img, 0, 0, null);
+            } catch (IOException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        File monImage = new File(jTextFieldImagePath.getText());
+        try {
+            //lien vers la base de données
+            Connection connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/applietudiants?user=applietudiants&password=sio");
+
+            //lien vers notre fichier image 
+            FileInputStream stream = new FileInputStream(monImage);
+
+            String query = "SELECT * FROM cv_photo WHERE id_utilisateur = " + infoEtudiant.getId();
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(query);
+
+            String sql = "";
+            if (results.next()) {
+                sql = "UPDATE cv_photo SET photo = ? WHERE id_utilisateur = ?";
+
+                PreparedStatement pstatement = connection.prepareStatement(sql);
+
+                //insertion de l'image 
+                pstatement.setBinaryStream(1, stream, (int) monImage.length());
+                pstatement.setInt(2, infoEtudiant.getId());
+                pstatement.executeUpdate();
+            } else {
+                sql = "INSERT INTO cv_photo VALUES (?, ?)";
+                //préparation de l'instruction SQL 
+
+                PreparedStatement pstatement = connection.prepareStatement(sql);
+
+                //insertion de l'image 
+                pstatement.setInt(1, infoEtudiant.getId());
+                pstatement.setBinaryStream(2, stream, (int) monImage.length());
+                pstatement.executeUpdate();
+            }
+
+        } catch (SQLException | FileNotFoundException e) {
+            //traitement des erreurs SQL, IO, etc. 
+        } finally {
+            //fermeture de la connexion, du flux, etc. 
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            Connection connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/applietudiants?user=applietudiants&password=sio");
+            String query = "SELECT * FROM cv_photo WHERE id_utilisateur = " + infoEtudiant.getId();
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(query);
+            if (results.next()) {
+                InputStream blob = results.getBinaryStream(2);
+                BufferedImage img = ImageIO.read(blob);
+                Graphics g = jPanelImage.getGraphics();
+                g.drawImage(img, 0, 0, null);
+            }
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButtonFormNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFormNextActionPerformed
+        if (Forms.size() > pageForms + 1) {
+            pageForms++;
+            refreshFormations();
+        }
+    }//GEN-LAST:event_jButtonFormNextActionPerformed
+
+    private void jButtonFormPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFormPrevActionPerformed
+        if (pageForms > 0) {
+            pageForms--;
+            refreshFormations();
+        }
+    }//GEN-LAST:event_jButtonFormPrevActionPerformed
+
+    private void jButtonFormAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFormAddActionPerformed
+        CVForm uneForm = new CVForm();
+        uneForm.setId_utilisateur(infoEtudiant.getId());
+
+        String libelle = jTextFieldFormPeriode.getText() + "||"
+                + jTextFieldFormForm.getText() + "||"
+                + jTextFieldFormLieu.getText();
+
+        uneForm.setLibelle_formation(libelle);
+
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous ajouter la formation suivante ?", "Ajout d'une formation", JOptionPane.OK_CANCEL_OPTION);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.formDao().createIfNotExists(uneForm);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            refreshFormations();
+        }
+    }//GEN-LAST:event_jButtonFormAddActionPerformed
+
+    private void jButtonFormUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFormUpdateActionPerformed
+        CVForm uneForm = Forms.get(pageForms);
+
+        String libelle = jTextFieldFormPeriode.getText() + "||"
+                + jTextFieldFormForm.getText() + "||"
+                + jTextFieldFormLieu.getText();
+
+        uneForm.setLibelle_formation(libelle);
+
+        try {
+            DaoS4.formDao().update(uneForm);
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButtonFormUpdateActionPerformed
+
+    private void jButtonFormDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFormDeleteActionPerformed
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous supprimer la formation ?", "Suppression d'une formation", JOptionPane.OK_CANCEL_OPTION);
+        CVForm uneForm = Forms.get(pageForms);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.formDao().delete(uneForm);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (pageForms + 1 == Forms.size()) {
+            pageForms--;
+        }
+        refreshFormations();
+    }//GEN-LAST:event_jButtonFormDeleteActionPerformed
+
+    private void jButtonInfoNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoNextActionPerformed
+        if (Infos.size() > pageInfos + 1) {
+            pageInfos++;
+            refreshInformatique();
+        }
+    }//GEN-LAST:event_jButtonInfoNextActionPerformed
+
+    private void jButtonInfoPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoPrevActionPerformed
+        if (pageInfos > 0) {
+            pageInfos--;
+            refreshInformatique();
+        }
+    }//GEN-LAST:event_jButtonInfoPrevActionPerformed
+
+    private void jButtonLangueNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLangueNextActionPerformed
+        if (Langues.size() > pageLangues + 1) {
+            pageLangues++;
+            refreshLangues();
+        }
+    }//GEN-LAST:event_jButtonLangueNextActionPerformed
+
+    private void jButtonLanguePrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLanguePrevActionPerformed
+        if (pageLangues > 0) {
+            pageLangues--;
+            refreshLangues();
+        }
+    }//GEN-LAST:event_jButtonLanguePrevActionPerformed
+
+    private void jButtonInfoAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoAddActionPerformed
+        CVInfo uneCompetence = new CVInfo();
+        uneCompetence.setId_utilisateur(infoEtudiant.getId());
+
+        String libelle = jTextFieldInfoCategorie.getText() + "||"
+                + jTextFieldInfoCompetences.getText();
+
+        uneCompetence.setLibelle_informatique(libelle);
+
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous ajouter la compétence suivante ?", "Ajout d'une compétence", JOptionPane.OK_CANCEL_OPTION);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.infoDao().createIfNotExists(uneCompetence);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            refreshInformatique();
+        }
+    }//GEN-LAST:event_jButtonInfoAddActionPerformed
+
+    private void jButtonInfoDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoDeleteActionPerformed
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous supprimer la compétence informatique ?", "Suppression d'une competence informatique", JOptionPane.OK_CANCEL_OPTION);
+        CVInfo uneCompetence = Infos.get(pageInfos);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.infoDao().delete(uneCompetence);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (pageInfos + 1 == Infos.size()) {
+            pageInfos--;
+        }
+        refreshInformatique();
+    }//GEN-LAST:event_jButtonInfoDeleteActionPerformed
+
+    private void jButtonLangueDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLangueDeleteActionPerformed
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous supprimer la compétence linguistique ?", "Suppression d'une compétence linguistique", JOptionPane.OK_CANCEL_OPTION);
+        CVLangue uneLangue = Langues.get(pageLangues);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.langueDao().delete(uneLangue);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (pageLangues + 1 == Langues.size()) {
+            pageLangues--;
+        }
+        refreshLangues();
+    }//GEN-LAST:event_jButtonLangueDeleteActionPerformed
+
+    private void jButtonLangueAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLangueAddActionPerformed
+        CVLangue uneLangue = new CVLangue();
+        uneLangue.setId_utilisateur(infoEtudiant.getId());
+
+        String libelle = jTextFieldLangue.getText() + "||"
+                + jTextFieldLangueNiveau.getText();
+
+        uneLangue.setLibelle_langue(libelle);
+
+        int reponse = JOptionPane.showConfirmDialog(this, "Voulez-vous ajouter la langue suivante ?", "Ajout d'une compétence linguistique", JOptionPane.OK_CANCEL_OPTION);
+        if (reponse == JOptionPane.YES_OPTION) {
+            try {
+                DaoS4.langueDao().createIfNotExists(uneLangue);
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            refreshLangues();
+        }
+    }//GEN-LAST:event_jButtonLangueAddActionPerformed
+
+    private void jButtonInfoUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoUpdateActionPerformed
+        CVInfo uneCompetence = Infos.get(pageInfos);
+
+        String libelle = jTextFieldInfoCategorie.getText() + "||"
+                + jTextFieldInfoCompetences.getText();
+
+        uneCompetence.setLibelle_informatique(libelle);
+
+        try {
+            DaoS4.infoDao().update(uneCompetence);
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonInfoUpdateActionPerformed
+
+    private void jButtonLangueUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLangueUpdateActionPerformed
+        CVLangue uneLangue = Langues.get(pageLangues);
+
+        String libelle = jTextFieldLangue.getText() + "||"
+                + jTextFieldLangueNiveau.getText();
+
+        uneLangue.setLibelle_langue(libelle);
+
+        try {
+            DaoS4.langueDao().update(uneLangue);
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonLangueUpdateActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        GeneratePDF.generatePdf(infoEtudiant);
+        JOptionPane.showMessageDialog(this,"Le pdf a correctement été généré");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void connecte(Etudiants leEtudiant) {
         //maj de l'etat de la connexion
-        this.connecte=true;
+        this.connecte = true;
         //ajout du nom dans la fenetre
-        this.nomjMenu.setText("Connecté en tant que : "+leEtudiant.getNom());
+        this.nomjMenu.setText("Connecté en tant que : " + leEtudiant.getNom());
         this.nomjMenu.setEnabled(false);
         this.infoEtudiant = leEtudiant;
-        
+        refreshTabbedPane();
     }
-    public void deconnecte(){
-        this.connecte=false;
+
+    public void deconnecte() {
+        this.connecte = false;
         this.nomjMenu.setText(null);
     }
-    public void majConnexion(){
+
+    public void majConnexion() {
+        jPanelOnConnection.setVisible(this.connecte);
         deconnexionMenuItem.setEnabled(this.connecte);
         modificationMenuItem.setEnabled(this.connecte);
         suppressionMenuItem.setEnabled(this.connecte);
         connexionMenuItem.setEnabled(!this.connecte);
         inscriptionMenuItem.setEnabled(!this.connecte);
     }
-    
-    public Etudiants getInfoEtudiant(){
+
+    public Etudiants getInfoEtudiant() {
         return this.infoEtudiant;
     }
-    
+
+    private void refreshTabbedPane() {
+        pageEPs = 0;
+        pageCIs = 0;
+        pageForms = 0;
+        pageInfos = 0;
+        pageLangues = 0;
+        refreshTitre();
+        refreshCIs();
+        refreshEPs();
+        refreshFormations();
+        refreshInformatique();
+        refreshLangues();
+    }
+
+    private void refreshInformatique() {
+        try {
+            if (!DaoS4.infoDao().queryForEq("id_utilisateur", infoEtudiant.getId()).isEmpty()) {
+                Infos = DaoS4.infoDao().queryForEq("id_utilisateur", infoEtudiant.getId());
+                jLabelInfoPages.setText(pageInfos + 1 + "/" + Infos.size());
+
+                String[] contenu = Infos.get(pageInfos).getLibelle_informatique().split(Pattern.quote("||"));
+
+                jTextFieldInfoCategorie.setText(contenu[0]);
+                jTextFieldInfoCompetences.setText(contenu[1]);
+
+            } else {
+                jLabelInfoPages.setText("0/0");
+                pageInfos = 0;
+                jTextFieldInfoCategorie.setText(null);
+                jTextFieldInfoCompetences.setText(null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void refreshLangues() {
+        try {
+            if (!DaoS4.langueDao().queryForEq("id_utilisateur", infoEtudiant.getId()).isEmpty()) {
+                Langues = DaoS4.langueDao().queryForEq("id_utilisateur", infoEtudiant.getId());
+                jLabelLanguePages.setText(pageLangues + 1 + "/" + Langues.size());
+
+                String[] contenu = Langues.get(pageLangues).getLibelle_langue().split(Pattern.quote("||"));
+
+                jTextFieldLangue.setText(contenu[0]);
+                jTextFieldLangueNiveau.setText(contenu[1]);
+
+            } else {
+                jLabelLanguePages.setText("0/0");
+                pageLangues = 0;
+                jTextFieldLangue.setText(null);
+                jTextFieldLangueNiveau.setText(null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void refreshFormations() {
+        try {
+            if (!DaoS4.formDao().queryForEq("id_utilisateur", infoEtudiant.getId()).isEmpty()) {
+                Forms = DaoS4.formDao().queryForEq("id_utilisateur", infoEtudiant.getId());
+                jLabelFormPages.setText(pageForms + 1 + "/" + Forms.size());
+
+                String[] contenu = Forms.get(pageForms).getLibelle_formation().split(Pattern.quote("||"));
+
+                jTextFieldFormPeriode.setText(contenu[0]);
+                jTextFieldFormForm.setText(contenu[1]);
+                jTextFieldFormLieu.setText(contenu[2]);
+            } else {
+                jLabelFormPages.setText("0/0");
+                pageForms = 0;
+                jTextFieldFormPeriode.setText(null);
+                jTextFieldFormLieu.setText(null);
+                jTextFieldFormForm.setText(null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void refreshEPs() {
+        try {
+            if (!DaoS4.epDao().queryForEq("id_utilisateur", infoEtudiant.getId()).isEmpty()) {
+                EPs = DaoS4.epDao().queryForEq("id_utilisateur", infoEtudiant.getId());
+                jLabelEPPages.setText(pageEPs + 1 + "/" + EPs.size());
+
+                String[] contenu = EPs.get(pageEPs).getLibelle_experience_prof().split(Pattern.quote("||"));
+
+                jTextFieldEPPeriode.setText(contenu[0]);
+                jTextFieldEPFonction.setText(contenu[1]);
+                jTextFieldEPEntreprise.setText(contenu[2]);
+                jTextFieldEPLieu.setText(contenu[3]);
+
+                String taches = "";
+                for (int i = 4; i < contenu.length; i++) {
+                    taches += contenu[i];
+                    if (i != contenu.length - 1) {
+                        taches += "||";
+                    }
+                }
+                jTextFieldEPTaches.setText(taches);
+            } else {
+                jLabelEPPages.setText("0/0");
+                pageEPs = 0;
+                jTextFieldEPEntreprise.setText(null);
+                jTextFieldEPFonction.setText(null);
+                jTextFieldEPLieu.setText(null);
+                jTextFieldEPPeriode.setText(null);
+                jTextFieldEPTaches.setText(null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void refreshTitre() {
+        try {
+            if (DaoS4.titreDao().queryForId(String.valueOf(infoEtudiant.getId())) != null) {
+                jTextFieldTitre.setText(DaoS4.titreDao().queryForId(String.valueOf(infoEtudiant.getId())).getLibelle_titre());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void refreshCIs() {
+        try {
+            if (!DaoS4.centreInteretDao().queryForEq("id_utilisateur", infoEtudiant.getId()).isEmpty()) {
+                CIs = DaoS4.centreInteretDao().queryForEq("id_utilisateur", infoEtudiant.getId());
+                jLabelCIPages.setText(pageCIs + 1 + "/" + CIs.size());
+                jTextFieldCI.setText(CIs.get(pageCIs).getLibelle_centre_interet());
+            } else {
+                pageCIs = 0;
+                jLabelCIPages.setText("0/0");
+                jTextFieldCI.setText(null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -278,11 +1694,90 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private javax.swing.JMenuItem aproposMenuItem;
     private javax.swing.JMenuItem connexionMenuItem;
     private javax.swing.JMenuItem deconnexionMenuItem;
-    private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem inscriptionMenuItem;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButtonCIAdd;
+    private javax.swing.JButton jButtonCIDelete;
+    private javax.swing.JButton jButtonCINext;
+    private javax.swing.JButton jButtonCIPrev;
+    private javax.swing.JButton jButtonCIUpdate;
+    private javax.swing.JButton jButtonEPAdd;
+    private javax.swing.JButton jButtonEPDelete;
+    private javax.swing.JButton jButtonEPNext;
+    private javax.swing.JButton jButtonEPPrev;
+    private javax.swing.JButton jButtonEPUpdate;
+    private javax.swing.JButton jButtonFormAdd;
+    private javax.swing.JButton jButtonFormDelete;
+    private javax.swing.JButton jButtonFormNext;
+    private javax.swing.JButton jButtonFormPrev;
+    private javax.swing.JButton jButtonFormUpdate;
+    private javax.swing.JButton jButtonInfoAdd;
+    private javax.swing.JButton jButtonInfoDelete;
+    private javax.swing.JButton jButtonInfoNext;
+    private javax.swing.JButton jButtonInfoPrev;
+    private javax.swing.JButton jButtonInfoUpdate;
+    private javax.swing.JButton jButtonLangueAdd;
+    private javax.swing.JButton jButtonLangueDelete;
+    private javax.swing.JButton jButtonLangueNext;
+    private javax.swing.JButton jButtonLanguePrev;
+    private javax.swing.JButton jButtonLangueUpdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelCIPages;
+    private javax.swing.JLabel jLabelEPPages;
+    private javax.swing.JLabel jLabelFormPages;
+    private javax.swing.JLabel jLabelImgSize;
+    private javax.swing.JLabel jLabelInfoPages;
+    private javax.swing.JLabel jLabelLanguePages;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanelCentreInteret;
+    private javax.swing.JPanel jPanelImage;
+    private javax.swing.JPanel jPanelOnConnection;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTextField jTextFieldCI;
+    private javax.swing.JTextField jTextFieldEPEntreprise;
+    private javax.swing.JTextField jTextFieldEPFonction;
+    private javax.swing.JTextField jTextFieldEPLieu;
+    private javax.swing.JTextField jTextFieldEPPeriode;
+    private javax.swing.JTextField jTextFieldEPTaches;
+    private javax.swing.JTextField jTextFieldFormForm;
+    private javax.swing.JTextField jTextFieldFormLieu;
+    private javax.swing.JTextField jTextFieldFormPeriode;
+    private javax.swing.JTextField jTextFieldImagePath;
+    private javax.swing.JTextField jTextFieldInfoCategorie;
+    private javax.swing.JTextField jTextFieldInfoCompetences;
+    private javax.swing.JTextField jTextFieldLangue;
+    private javax.swing.JTextField jTextFieldLangueNiveau;
+    private javax.swing.JTextField jTextFieldTitre;
     private javax.swing.JMenuItem modificationMenuItem;
     private javax.swing.JMenuBar nomMenuBar;
     private javax.swing.JMenu nomjMenu;

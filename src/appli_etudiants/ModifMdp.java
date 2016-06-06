@@ -4,19 +4,11 @@
  */
 package appli_etudiants;
 
-import com.mysql.jdbc.Connection;
-import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
 
 /**
  *

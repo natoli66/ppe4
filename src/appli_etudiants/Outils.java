@@ -6,7 +6,6 @@ package appli_etudiants;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import javax.swing.JOptionPane;
 
 /**
  *

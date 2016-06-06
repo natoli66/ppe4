@@ -5,8 +5,6 @@
 package appli_etudiants;
 
 import com.mysql.jdbc.Connection;
-import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -150,7 +148,7 @@ public class Connexion extends javax.swing.JDialog {
                 //interrogation de la BD pour savoir si l'identifiant/mot de passe est correct
                 //instanciation de la classe Driver du paquetage jdbc de mysql
                 Class.forName("com.mysql.jdbc.Driver");
-                //Chaine de connexion (prise dans l'onglet services
+                //Chaine de connexion (prise dans l'onglet services)
                 String connexionUrl="jdbc:mysql://localhost:3306/applietudiants?user=applietudiants&password=sio";
                
                 //etablissement de la connexion
@@ -169,8 +167,7 @@ public class Connexion extends javax.swing.JDialog {
                 ResultSet lignesRetournees=requete.executeQuery("select * from Utilisateurs where identifiant='"+identifiant+"' and mot_de_passe='"+mdp+"'");
                 if (lignesRetournees.next()){
                     //Modifications de la Mission 2 à placer ici
-                    
-                    
+
                     this.fenetre.connecte(DaoS4.etudiantsDao().queryForId(identifiant));
                     this.setVisible(false);
                     this.fenetre.majConnexion();

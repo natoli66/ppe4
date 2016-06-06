@@ -4,14 +4,8 @@
  */
 package appli_etudiants;
 
-import com.mysql.jdbc.Connection;
-import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -49,7 +43,7 @@ public class Suppression extends javax.swing.JDialog {
     private void initComponents() {
 
         jDialog1 = new javax.swing.JDialog();
-        jButtonConnecter = new javax.swing.JButton();
+        jButtonSupprimer = new javax.swing.JButton();
         jPassMDP = new javax.swing.JPasswordField();
         jLabelMDP = new javax.swing.JLabel();
         jLabelIdentifiant = new javax.swing.JLabel();
@@ -72,10 +66,10 @@ public class Suppression extends javax.swing.JDialog {
         setModal(true);
         setResizable(false);
 
-        jButtonConnecter.setText("Se connecter");
-        jButtonConnecter.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSupprimer.setText("Supprimer");
+        jButtonSupprimer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonConnecterActionPerformed(evt);
+                jButtonSupprimerActionPerformed(evt);
             }
         });
 
@@ -111,7 +105,7 @@ public class Suppression extends javax.swing.JDialog {
                             .add(jPassMDP, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
                         .add(59, 59, 59))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(jButtonConnecter)
+                        .add(jButtonSupprimer)
                         .add(126, 126, 126))))
         );
         layout.setVerticalGroup(
@@ -128,14 +122,14 @@ public class Suppression extends javax.swing.JDialog {
                     .add(jPassMDP, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabelMDP))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jButtonConnecter)
+                .add(jButtonSupprimer)
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonConnecterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnecterActionPerformed
+    private void jButtonSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSupprimerActionPerformed
         if(!jTextFieldIdentifiant.getText().equals(etudiant.getIdentifiant())){
             JOptionPane.showMessageDialog(this, "L'identifiant saisi est incorrect !");
         }else{
@@ -143,12 +137,12 @@ public class Suppression extends javax.swing.JDialog {
                 if(!Outils.md5(jPassMDP.getText()).equals(etudiant.getMot_de_passe())){
                     JOptionPane.showMessageDialog(this, "Le mot de passe saisi est incorrect !");
                 }else{
-                    System.out.println(etudiant);
                     DaoS4.etudiantsDao().delete(etudiant);
                     this.fenetre.deconnecte();
                     this.fenetre.majConnexion();
                     this.setVisible(false);
                     this.dispose();
+                    JOptionPane.showMessageDialog(fenetre, "L'utilisateur a bien été supprimé");
                 }
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(Suppression.class.getName()).log(Level.SEVERE, null, ex);
@@ -156,7 +150,7 @@ public class Suppression extends javax.swing.JDialog {
                 Logger.getLogger(Suppression.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_jButtonConnecterActionPerformed
+    }//GEN-LAST:event_jButtonSupprimerActionPerformed
 
     private void jPassMDPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassMDPActionPerformed
         // TODO add your handling code here:
@@ -205,7 +199,7 @@ public class Suppression extends javax.swing.JDialog {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonConnecter;
+    private javax.swing.JButton jButtonSupprimer;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelIdentifiant;

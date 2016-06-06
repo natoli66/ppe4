@@ -14,6 +14,8 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "utilisateurs")
 public class Etudiants{
     
+    @DatabaseField
+    private Integer id_utilisateur;
     @DatabaseField(id=true)
     private String identifiant;
     @DatabaseField
@@ -36,8 +38,26 @@ public class Etudiants{
     private String courriel;
     @DatabaseField
     private String site_web;
+    @DatabaseField
+    private Integer annee_entree_promotion;
+    @DatabaseField
+    private Integer annee_sortie_promotion;
+    @DatabaseField
+    private String role;
+    @DatabaseField
+    private Integer actif;
+    @DatabaseField
+    private Integer vue_cv;
     
     //accesseurs
+    public Integer getId() {
+        return id_utilisateur;
+    }
+
+    public void setId(Integer id) {
+        this.id_utilisateur = id;
+    }
+    
     public String getIdentifiant() {
         return identifiant;
     }
@@ -125,5 +145,54 @@ public class Etudiants{
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
+
+    public Integer getId_utilisateur() {
+        return id_utilisateur;
+    }
+
+    public void setId_utilisateur(Integer id_utilisateur) {
+        this.id_utilisateur = id_utilisateur;
+    }
+
+    public Integer getAnnee_entree_promotion() {
+        return annee_entree_promotion;
+    }
+
+    public void setAnnee_entree_promotion(Integer annee_entree_promotion) {
+        this.annee_entree_promotion = annee_entree_promotion;
+    }
+
+    public Integer getAnnee_sortie_promotion() {
+        return annee_sortie_promotion;
+    }
+
+    public void setAnnee_sortie_promotion(Integer annee_sortie_promotion) {
+        this.annee_sortie_promotion = annee_sortie_promotion;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Integer getActif() {
+        return actif;
+    }
+
+    public void setActif(Integer actif) {
+        this.actif = actif;
+    }
+
+    public Integer getVue_cv() {
+        return vue_cv;
+    }
+
+    public void setVue_cv(Integer vue_cv) {
+        this.vue_cv = vue_cv;
+    }
      
+    
 }

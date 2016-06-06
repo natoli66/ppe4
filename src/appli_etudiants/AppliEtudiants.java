@@ -4,9 +4,6 @@
  */
 package appli_etudiants;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author nc
