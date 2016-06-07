@@ -27,6 +27,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import webservices.ExportAsXML;
+import webservices.WSPPE4;
 
 /**
  *
@@ -181,7 +183,8 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         deconnexionMenuItem = new javax.swing.JMenuItem();
         SortieMenuItem = new javax.swing.JMenuItem();
         aideMenu = new javax.swing.JMenu();
-        aproposMenuItem = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        exportMenuItem = new javax.swing.JMenuItem();
         nomjMenu = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
@@ -879,17 +882,15 @@ public class InterfaceGraphique extends javax.swing.JFrame {
             jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelOnConnectionLayout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanelOnConnectionLayout.createSequentialGroup()
-                        .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE))
+                .add(jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanelOnConnectionLayout.createSequentialGroup()
                         .add(jTextFieldTitre, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButton1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(jButton2)))
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelOnConnectionLayout.setVerticalGroup(
             jPanelOnConnectionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -968,17 +969,26 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         nomMenuBar.add(fileMenu);
 
         aideMenu.setMnemonic('h');
-        aideMenu.setText("Aide");
+        aideMenu.setText("Bdd");
 
-        aproposMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        aproposMenuItem.setMnemonic('c');
-        aproposMenuItem.setText("A propos");
-        aproposMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Exporter en .xml");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aproposMenuItemActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        aideMenu.add(aproposMenuItem);
+        aideMenu.add(jMenuItem2);
+
+        exportMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        exportMenuItem.setMnemonic('c');
+        exportMenuItem.setText("Importer un .xml");
+        exportMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportMenuItemActionPerformed(evt);
+            }
+        });
+        aideMenu.add(exportMenuItem);
 
         nomMenuBar.add(aideMenu);
         nomMenuBar.add(nomjMenu);
@@ -1030,9 +1040,21 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         this.fenInscription.setVisible(true);
     }//GEN-LAST:event_inscriptionMenuItemActionPerformed
 
-    private void aproposMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aproposMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_aproposMenuItemActionPerformed
+    private void exportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMenuItemActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            Integer etudiants = importFromXML(fileChooser.getSelectedFile().getAbsolutePath());
+            if(etudiants == 0){
+                JOptionPane.showMessageDialog(this,"Une erreur a été rencontré lors de l'importation du fichier xml");
+            }else{
+                JOptionPane.showMessageDialog(this,etudiants + " étudiants ont été ajoutés à la base de données");
+            }
+        }
+    }//GEN-LAST:event_exportMenuItemActionPerformed
 
     private void modificationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificationMenuItemActionPerformed
         fenModification = new Modification(this, true);
@@ -1204,7 +1226,7 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
             jTextFieldImagePath.setText(path);
-            if (fileChooser.getSelectedFile().length() < 65535) {
+            if (fileChooser.getSelectedFile().length() <= 65535) {
                 jLabelImgSize.setForeground(Color.GREEN);
             } else {
                 jLabelImgSize.setForeground(Color.RED);
@@ -1274,6 +1296,7 @@ public class InterfaceGraphique extends javax.swing.JFrame {
                 InputStream blob = results.getBinaryStream(2);
                 BufferedImage img = ImageIO.read(blob);
                 Graphics g = jPanelImage.getGraphics();
+                g.clearRect(0, 0, getWidth(), getHeight());
                 g.drawImage(img, 0, 0, null);
             }
         } catch (SQLException | IOException ex) {
@@ -1484,6 +1507,15 @@ public class InterfaceGraphique extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this,"Le pdf a correctement été généré");
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        Integer results = exportAsXML();
+        if(results == 0){
+            JOptionPane.showMessageDialog(this,"Erreur lors de la création du fichier .xml");
+        }else{
+            JOptionPane.showMessageDialog(this, results+" utilisateurs ont été enregistré dans le fichier .xml");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     public void connecte(Etudiants leEtudiant) {
         //maj de l'etat de la connexion
         this.connecte = true;
@@ -1653,6 +1685,8 @@ public class InterfaceGraphique extends javax.swing.JFrame {
             Logger.getLogger(InterfaceGraphique.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 
     /**
      * @param args the command line arguments
@@ -1691,9 +1725,9 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem SortieMenuItem;
     private javax.swing.JMenu aideMenu;
-    private javax.swing.JMenuItem aproposMenuItem;
     private javax.swing.JMenuItem connexionMenuItem;
     private javax.swing.JMenuItem deconnexionMenuItem;
+    private javax.swing.JMenuItem exportMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem inscriptionMenuItem;
     private javax.swing.JButton jButton1;
@@ -1751,6 +1785,7 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelInfoPages;
     private javax.swing.JLabel jLabelLanguePages;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1783,4 +1818,18 @@ public class InterfaceGraphique extends javax.swing.JFrame {
     private javax.swing.JMenu nomjMenu;
     private javax.swing.JMenuItem suppressionMenuItem;
     // End of variables declaration//GEN-END:variables
+
+    private static Integer exportAsXML() {
+        webservices.WSPPE4_Service service = new webservices.WSPPE4_Service();
+        webservices.WSPPE4 port = service.getWSPPE4Port();
+        return port.exportAsXML();
+    }
+
+    private static Integer importFromXML(java.lang.String file) {
+        webservices.WSPPE4_Service service = new webservices.WSPPE4_Service();
+        webservices.WSPPE4 port = service.getWSPPE4Port();
+        return port.importFromXML(file);
+    }
+
+
 }

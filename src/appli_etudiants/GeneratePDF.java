@@ -62,7 +62,6 @@ public class GeneratePDF {
                 byte[] blobBytes = blob.getBytes(1, bloblength);
                 Image image = Image.getInstance(blobBytes);
                 blob.free();
-                System.out.println(image.getWidth());
                 image.scaleAbsolute(100, 100);
                 
                 image.setAbsolutePosition(document.right()-image.getScaledWidth(), document.top()-image.getScaledHeight());
